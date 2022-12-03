@@ -1,12 +1,11 @@
 package org.example.day1
 
-import java.net.URL
+import java.io.BufferedReader
 
-class CalorieCounter(private val url: URL) {
+class CalorieCounter(private val reader: BufferedReader) {
     fun topCalories() =
-        url.readText()
-            .lines()
-            .fold(mutableListOf<MutableList<String>>(mutableListOf())) { groups, line ->
+        reader.useLines { lines ->
+            lines.fold(mutableListOf<MutableList<String>>(mutableListOf())) { groups, line ->
                 if (line.isEmpty()) {
                     groups.add(mutableListOf())
                 } else {
@@ -16,21 +15,26 @@ class CalorieCounter(private val url: URL) {
             }
             .map { it.map(String::toInt) }
             .maxOfOrNull { it.sum() }
+        }
 
     fun top3Calories() =
-        url.readText()
-            .lines()
-            .fold(mutableListOf<MutableList<String>>(mutableListOf())) { groups, line ->
-                if (line.isEmpty()) {
-                    groups.add(mutableListOf())
-                } else {
-                    groups.last().add(line)
-                }
-                groups
-            }
-            .map { it.map(String::toInt) }
-            .map { it.sum() }
-            .sorted()
-            .takeLast(3)
-            .sum()
+        reader.useLines { lines ->
+            lines
+                .split("")
+                .map { it.map(String::toInt) }
+                .map { it.sum() }
+                .sorted()
+                .takeLast(3)
+                .sum()
+        }
 }
+
+private fun <T> Sequence<T>.split(delimiter: T) =
+    this.fold(mutableListOf<MutableList<T>>(mutableListOf())) { groups, line ->
+        if (line == delimiter) {
+            groups.add(mutableListOf())
+        } else {
+            groups.last().add(line)
+        }
+        groups
+    } as List<List<T>>
