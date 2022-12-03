@@ -1,12 +1,11 @@
 package org.example
 
-import java.net.URL
+import java.io.BufferedReader
 
-class StrategyDecoder(private val url: URL) {
+class StrategyDecoder(private val reader: BufferedReader) {
     fun firstDecode() =
-        url.readText()
-            .lines()
-            .map { line ->
+        reader.useLines { lines ->
+            lines.map { line ->
                 when (line) {
                     "A X" -> 1 + 3 // Draw -- Rock/Rock
                     "A Y" -> 2 + 6 // Win  -- Rock/Paper
@@ -21,11 +20,11 @@ class StrategyDecoder(private val url: URL) {
                 }
             }
             .sum()
+        }
 
     fun secondDecode() =
-        url.readText()
-            .lines()
-            .map { line ->
+        reader.useLines { lines ->
+            lines.map { line ->
                 when (line) {
                     "A X" -> 3 + 0 // Lose -- Rock/Scissors
                     "A Y" -> 1 + 3 // Draw -- Rock/Rock
@@ -40,4 +39,5 @@ class StrategyDecoder(private val url: URL) {
                 }
             }
             .sum()
+        }
 }
