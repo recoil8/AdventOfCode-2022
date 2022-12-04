@@ -3,46 +3,29 @@ import java.io.BufferedReader
 class ElfPairs(private val reader: BufferedReader) {
     fun containedPairs(): Int =
         reader.useLines { lines ->
-            lines
-                .map { line -> line.split(",") }
-                .map { stringPair: List<String> ->
-                    stringPair
-                        .map { it.split("-") }
-                        .map { endPoints -> endPoints.map { it.toInt() }}
-                        .map { endPoints -> endPoints.let { range -> IntRange(range[0], range[1]) }}
-                        .let { ranges: List<IntRange> ->
-                            val first: IntRange = ranges[0]
-                            val second: IntRange = ranges[1]
-                            if (first.containsRange(second) || second.containsRange(first)) {
-                                1
-                            }
-                            else 0
-                        }
-                }
+            parseLines(lines)
+                .map { ranges -> ranges[0].containsRange(ranges[1]) || ranges[1].containsRange(ranges[0]) }
+                .map { if (it) 1 else 0 }
                 .sum()
         }
 
     fun overlappingPairs() =
         reader.useLines { lines ->
-            lines
-                .map { line -> line.split(",") }
-                .map { stringPair: List<String> ->
-                    stringPair
-                        .map { it.split("-") }
-                        .map { endPoints -> endPoints.map { it.toInt() }}
-                        .map { endPoints -> endPoints.let { range -> IntRange(range[0], range[1]) }}
-                        .let { ranges: List<IntRange> ->
-                            val first: IntRange = ranges[0]
-                            val second: IntRange = ranges[1]
-                            if (first.overlapsRange(second) || second.containsRange(first)) {
-                                1
-                            }
-                            else 0
-                        }
-                }
+            parseLines(lines)
+                .map { ranges -> ranges[0].overlapsRange(ranges[1]) || ranges[1].containsRange(ranges[0]) }
+                .map { if (it) 1 else 0 }
                 .sum()
         }
 
+    private fun parseLines(lines: Sequence<String>) =
+        lines
+            .map { line -> line.split(",") }
+            .map { rangeStrings ->
+                rangeStrings
+                    .map { it.split("-") }
+                    .map { it.map(String::toInt) }
+                    .map { it.let { range -> IntRange(range[0], range[1]) } }
+            }
 }
 
 private fun IntRange.overlapsRange(range: IntRange) =

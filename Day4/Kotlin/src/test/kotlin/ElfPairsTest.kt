@@ -4,7 +4,7 @@ import org.junit.jupiter.api.Test
 import java.nio.charset.Charset
 
 internal class ElfPairsTest {
-    val pairsExample = """
+    private val pairsExample = """
         2-4,6-8
         2-3,4-5
         5-7,7-9
