@@ -1,3 +1,5 @@
+package org.example
+
 import java.io.BufferedReader
 
 class ElfPairs(private val reader: BufferedReader) {

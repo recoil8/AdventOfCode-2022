@@ -1,3 +1,5 @@
+package org.example
+
 import assertk.assertThat
 import assertk.assertions.isEqualTo
 import org.junit.jupiter.api.Test
@@ -44,19 +46,6 @@ internal class ElfPairsTest {
 
         assertThat(numContained).isEqualTo(931)
     }
-
-//    @Test
-//    fun explore() {
-//        val pairStrings = "2-6,4-8".split(",")
-//        println(pairStrings)
-//
-//        val firstRange = pairStrings.first()
-//        val first = IntRange(
-//            firstRange.split("-").first().toInt(),
-//            firstRange.split("-")[1].toInt(),
-//        )
-//        println(first)
-//    }
 }
 
 private fun <T> Class<T>.getResourceAsBufferedReader(name: String, charset: Charset = Charsets.UTF_8) =
