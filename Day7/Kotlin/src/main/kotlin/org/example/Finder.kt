@@ -21,7 +21,7 @@ class Finder(reader: BufferedReader) {
                                 currentDir = newDir
                             }
                         }
-                        line.startsWith("dir") -> currentDir.createDir(line.removePrefix("dir "))
+                        line.startsWith("dir ") -> currentDir.createDir(line.removePrefix("dir "))
                         line.matches(Regex("\\d+.*")) -> {
                             val (size, name) = line.split(" ")
                             currentDir.createFile(name, size.toInt())
@@ -50,6 +50,19 @@ class Finder(reader: BufferedReader) {
             }
             .let { it?.first ?: 0 }
 
+    private fun calcDirectorySizes(directory: DirectoryEntry, found: MutableList<Pair<Int,DirectoryEntry>>): Int =
+        directory
+            .files
+            .values
+            .fold(0) { sum, entry ->
+                sum + when (entry) {
+                    is FileEntry -> entry.size
+                    is DirectoryEntry -> calcDirectorySizes(entry, found)
+                    else -> 0
+                }
+            }
+            .also { found.add(Pair(it, directory)) }
+
     @Suppress("unused")
     private fun printDirTree(directory: DirectoryEntry, prefix: String = "") {
         println("$prefix- ${directory.name} (dir)")
@@ -61,22 +74,11 @@ class Finder(reader: BufferedReader) {
             }
         }
     }
-
-    private fun calcDirectorySizes(directory: DirectoryEntry, found: MutableList<Pair<Int,DirectoryEntry>>) {
-        directory.files.forEach { (_, entry) ->
-            when (entry) {
-                is FileEntry -> {}
-                is DirectoryEntry -> calcDirectorySizes(entry, found)
-            }
-        }
-        found.add(Pair(directory.calcSize(), directory))
-    }
 }
 
 interface Entry {
     val name: String
     val size: Int
-    fun calcSize(): Int
 }
 
 data class DirectoryEntry(
@@ -86,8 +88,6 @@ data class DirectoryEntry(
 ): Entry {
     override fun toString() = "$name (dir)"
     override val size: Int = 0
-    override fun calcSize(): Int =
-        files.values.fold(0) { sum, entry -> sum + entry.calcSize() }
 
     fun createDir(name: String) {
         this.files[name] = DirectoryEntry(name, this)
@@ -98,6 +98,4 @@ data class DirectoryEntry(
     }
 }
 
-data class FileEntry(override val name: String, override val size: Int) : Entry {
-    override fun calcSize(): Int = size
-}
+data class FileEntry(override val name: String, override val size: Int) : Entry
