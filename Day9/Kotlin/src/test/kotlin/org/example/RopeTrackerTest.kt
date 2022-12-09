@@ -28,40 +28,40 @@ internal class RopeTrackerTest {
 
     @Test
     fun trackRopeExample() {
-        val tailPlaces = RopeTracker(exampleInput.reader(), 6, Pair(5,0))
-            .trackRopeTail()
+        val tailPlaces = RopeTracker(exampleInput.reader())
+            .trackRopeTail(2)
 
         assertThat(tailPlaces).isEqualTo(13)
     }
 
     @Test
     fun trackRope() {
-        val tailPlaces = RopeTracker(javaClass.getResourceAsReader("/RopeMoves.txt")!!, 1999, Pair(999,999))
-            .trackRopeTail()
+        val tailPlaces = RopeTracker(javaClass.getResourceAsReader("/RopeMoves.txt")!!)
+            .trackRopeTail(2)
 
         assertThat(tailPlaces).isEqualTo(5981)
     }
 
     @Test
     fun trackLongRopeExample() {
-        val tailPlaces = RopeTracker(exampleInput.reader(), 6, Pair(5,0))
-            .trackLongRopeTail(10)
+        val tailPlaces = RopeTracker(exampleInput.reader())
+            .trackRopeTail(10)
 
         assertThat(tailPlaces).isEqualTo(1)
     }
 
     @Test
     fun trackLongRopeLargeExample() {
-        val tailPlaces = RopeTracker(largeExampleInput.reader(), 26, Pair(15,11))
-            .trackLongRopeTail(10)
+        val tailPlaces = RopeTracker(largeExampleInput.reader())
+            .trackRopeTail(10)
 
         assertThat(tailPlaces).isEqualTo(36)
     }
 
     @Test
     fun trackLongRope() {
-        val tailPlaces = RopeTracker(javaClass.getResourceAsReader("/RopeMoves.txt")!!, 1999, Pair(999,999))
-            .trackLongRopeTail(10)
+        val tailPlaces = RopeTracker(javaClass.getResourceAsReader("/RopeMoves.txt")!!)
+            .trackRopeTail(10)
 
         assertThat(tailPlaces).isEqualTo(2352)
     }
