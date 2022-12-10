@@ -160,7 +160,7 @@ internal class SignalSimulatorTest {
         #####.....#####.....#####.....#####.....
         ######......######......######......####
         #######.......#######.......#######.....
-    """.trimIndent().plus("\n")
+    """.trimIndent()
 
     @Test
     fun sampledSignalExample() {
@@ -200,7 +200,7 @@ internal class SignalSimulatorTest {
             #.......#.#..#.#..#.#..#.#....###...#...
             #....#..#.#..#.#..#.#..#.#....#.#..#....
             #.....##...##..###...##..####.#..#.####.
-        """.trimIndent().plus("\n"))
+        """.trimIndent())
     }
 }
 
